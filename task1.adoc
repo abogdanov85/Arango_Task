@@ -15,7 +15,11 @@ It transforms document collections into structured, interconnected graphs that c
 
 == What Is a Knowledge Graph
 
-Here is a simple Knowledge Graph with three nodes for concepts and two edges for relationships between concepts:
+Here is a simple Knowledge Graph which represents two pieces of information:
+
+. _Mary bought a book._
+. _Mary is friend of John._
+
 
 [caption=]
 .An example of a Knowledge Graph
@@ -39,6 +43,10 @@ digraph G {
     Mary -> John [label="isFriendOf"];
 }
 ....
+
+It has three nodes for concepts (_Mary_, _John_, _a book_) and two edges for relationships between concepts (_bought_ and _is friend to_).
+
+
 
 == How GraphRAG Differs from Traditional RAG
 
