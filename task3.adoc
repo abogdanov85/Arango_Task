@@ -29,7 +29,7 @@ It stays unclear how a user should choose a value for `project_type` parameter.
 
 === Unclear Authentication Context
 
-The current documentation shows a curl with Authorization: `Bearer <your-bearer-token>` but doesn’t explain how to obtain the token.
+The current documentation shows a curl with authorization: `Bearer <your-bearer-token>` but doesn’t explain how to obtain the token.
 
 <<<
 

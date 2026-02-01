@@ -42,7 +42,10 @@ digraph G {
 
 == How GraphRAG Differs from Traditional RAG
 
-Traditional *RAG* systems typically rely on vector similarity search over document chunks. While effective for simple lookup, they treat documents as isolated pieces of text.
+// I'm using One Sentence per Line method 
+// See: https://nick.groenen.me/notes/one-sentence-per-line/
+Traditional *RAG* systems typically rely on vector similarity search over document chunks.
+While effective for simple lookup, they treat documents as isolated pieces of text.
 
 *GraphRAG* differs in key ways:
 
