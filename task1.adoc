@@ -3,7 +3,7 @@
 :asciidoctor-diagram:
 
 // Dictionary for internal use inside tech writer team
-// with pages and links to them and other predefined entities
+// with variables for pages and links to them and other predefined entities
 include::dictionary.adoc[]
 
 == What Is GraphRAG
@@ -160,7 +160,10 @@ Legal teams can analyze cases, precedents, and regulations by following explicit
 
 == Data Privacy
 
-* *Self-hosted LLMs* are ideal for sensitive or regulated environments
+// Here for the purpose of demonstration I make a direct include to your content source file
+include::https://raw.githubusercontent.com/arangodb/docs-hugo/refs/heads/main/site/content/ai-suite/graphrag/technical-overview.md[lines=133..134]
+
+* *Private (self-hosted) LLMs* are ideal for sensitive or regulated environments
 * *Public LLMs* reduce operational overhead but require careful data handling
 
 Deployment choices should align with compliance, security, and governance requirements.
