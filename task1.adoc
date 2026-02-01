@@ -1,0 +1,185 @@
+= Arango GraphRAG Overview
+:author: Alexey Bogdanov
+:asciidoctor-diagram:
+
+// Dictionary for internal use inside tech writer team
+// with pages and links to them and other predefined entities
+include::dictionary.adoc[]
+
+== What Is GraphRAG
+
+*GraphRAG* (Graph-based Retrieval-Augmented Generation) is Arango’s approach to combining https://en.wikipedia.org/wiki/Knowledge_graph[*Knowledge Graphs*] with https://en.wikipedia.org/wiki/Large_language_model[*Large Language Models (LLMs)*] to deliver AI experiences that go beyond traditional text-only https://en.wikipedia.org/wiki/Retrieval-augmented_generation[*RAG*] systems.
+
+// Both "relationships" and "relations" are used in source pages (can be a problem!)
+It transforms document collections into structured, interconnected graphs that capture not only facts but also the relationships between concepts dramatically improving relevance, accuracy, and reasoning.
+
+== What Is a Knowledge Graph
+
+Here is a simple Knowledge Graph with three nodes for concepts and two edges for relationships between concepts:
+
+[caption=]
+.An example of a Knowledge Graph
+[graphviz]
+....
+digraph G {
+    // Global graph attributes for monochrome style and left-to-right rank
+    graph [bgcolor=white, fontname=Helvetica, rankdir=LR];
+    // Global node attributes
+    node [shape=circle, color=black, fontcolor=black, style="solid,filled", fillcolor=white, fontname=Helvetica];
+    // Global edge attributes
+    edge [color=black, fontcolor=black, fontname=Helvetica];
+
+    // Define nodes
+    Mary [label="Mary", width=0.8, fixedsize=true];
+    Book [label="Book", width=0.8, fixedsize=true];
+    John [label="John", width=0.8, fixedsize=true];
+
+    // Define edges (relationships) with labels
+    Mary -> Book [label="bought"];
+    Mary -> John [label="isFriendOf"];
+}
+....
+
+== How GraphRAG Differs from Traditional RAG
+
+Traditional *RAG* systems typically rely on vector similarity search over document chunks. While effective for simple lookup, they treat documents as isolated pieces of text.
+
+*GraphRAG* differs in key ways:
+
+* *Traditional RAG* retrieves semantically similar chunks and relies on the LLM to infer relationships.
+* *GraphRAG* retrieves a *subgraph of explicitly connected entities and relationships*, giving the LLM structured context to reason over.
+
+This results in:
+
+* Better multi-hop reasoning
+* Reduced hallucinations
+* Clearer traceability of answers
+
+== When and Why to Use GraphRAG
+
+Organizations should consider *GraphRAG* when:
+
+* Their data is *complex and interconnected* (e.g., legal, research, enterprise knowledge bases) 
+* Their data is stored in *unstructured* formats (PDF, Docx, other text formats)
+* Queries require *contextual* or *multi-step reasoning* across documents
+* *Accuracy*, *explainability*, and *trust* are critical
+* *Natural-language access* to large internal knowledge collections is required
+
+Simpler traditional *RAG* solutions may be sufficient only for basic FAQ-style or keyword-driven use cases.
+
+
+== End-to-End Workflow
+
+=== {counter:sec-workflow}. Document Ingestion
+* Documents are split into chunks and processed by the {importer-service}
+* LLMs identify entities, concepts, and relationships between them
+
+=== {counter:sec-workflow}. Knowledge Graph Construction
+* Entities become *nodes* with embeddings
+* Relationships become *edges*, these include: `entity-entity`, `entity-chunk`, `chunk-document`
+// I don't mention communities here to make it shorter and simpler (can be added if it is crucial)
+* The result is a domain-specific knowledge graph stored in *ArangoDB*
+
+=== {counter:sec-workflow}. Query and Retrieval
+* Users ask questions in natural language
+* The {retriever-service} uses intelligent search and retrieval using multiple 
+search methods to find relevant subgraphs
+
+=== {counter:sec-workflow}. Answer Generation
+* Retrieved subgraphs and context are passed to an LLM
+* The LLM produces accurate, context-aware responses at the appropriate level of detail
+
+<<<
+
+
+// The order is not as in the task: use cases are after technical architecture
+== Technical Architecture
+
+GraphRAG is composed of modular services:
+
+[graphviz]
+....
+digraph WorkflowPipeline {
+    // Set vertical orientation (Top to Bottom)
+    rankdir=TB;
+    // Global style for all nodes (blocks)
+    node [shape=box, style="filled,rounded", fontname="Arial", fillcolor="#ffffff"];
+    // Global style for all edges (arrows)
+    edge [arrowhead=vee, color="#555555", fontname="Arial", fontsize=10];
+
+    // --- STEP NODES ---
+    S1 [label="1. Chunking\l • Breaking down raw documents into text chunks   \l", fillcolor="#BBDEFB"];
+    S2 [label="2. Entity and relation extraction for Knowledge Graph construction   \l• LLM-assisted description of entities and relations\l• Entities get inserted as nodes with embeddings\l• Relations get inserted as edges\l", fillcolor="#BBDEFB"];
+    S3 [label="3. Topology-based clustering into mini-topics (communities)\l• Each entity points to its community\l• Each community points to its higher-level community           \l", fillcolor="#BBDEFB"];
+    S4 [label="4. LLM-assisted community summarization\l• Based on all information available about each topic     \l", fillcolor="#BBDEFB"];
+
+    // --- DATA NODES ---
+    D_RawDocs [label="Raw Text Documents", shape=note];
+    D_Chunks [label="Text Chunks", shape=note];
+    D_KG [label="Knowledge Graphs", shape=note];
+    D_Communities [label="Hierarchical Communities", shape=note];
+    D_Summaries [label="Topic Summaries", shape=note];
+
+    // --- PROCESS FLOW (VERTICAL) ---
+    D_RawDocs -> S1;
+    S1 -> D_Chunks;
+    D_Chunks -> S2;
+    S2 -> D_KG;
+    D_KG -> S3;
+    S3 -> D_Communities;
+    D_Communities -> S4;
+    S4 -> D_Summaries;
+    
+    // --- SPECIFIC INTERNAL RELATIONS ---
+    // Relation types within the KG (dashed lines)
+    D_KG -> D_KG [label="entity-entity,\nentity-chunk,\nchunk-document", style=dashed, 
+    //color="#01579B"
+    ];
+    // Hierarchy of topics (dashed lines)
+    D_Communities -> D_Communities [label="entity - community,\ncommunity - high-level community", style=dashed,
+    //color="#2E7D32"
+    ];
+    // Link from entities to communities
+    //D_KG -> D_Communities [label="Entities point to communities", color="#5d4037"];
+}
+....
+
+<<<
+
+== Business Use Cases
+
+=== {counter:sec-usecases}. Enterprise Knowledge Management
+Employees can query years of internal reports and documentation to receive structured, connected answers instead of isolated text snippets.
+
+=== {counter:sec-usecases}. Research and Development
+Researchers can explore relationships across studies, experiments, and findings—enabling deeper insights and faster discovery.
+
+=== {counter:sec-usecases}. Legal and Compliance Analysis
+Legal teams can analyze cases, precedents, and regulations by following explicit relationships across documents.
+
+
+== Data Privacy
+
+* *Self-hosted LLMs* are ideal for sensitive or regulated environments
+* *Public LLMs* reduce operational overhead but require careful data handling
+
+Deployment choices should align with compliance, security, and governance requirements.
+
+[TIP]
+====
+For self-hosted option we offer *Triton Inference Server* -- the backbone for running LLM and embedding models on your own machines.
+
+
+For setup instructions, see {triton-inference-server} 
+and {mlflow} documentation.
+====
+
+// I don't have any information about best practices 
+// so this is the point where I would like to seek input
+// from product, engineering, or other stakeholders
+== Best Practices for Implementation and Using GraphRAG
+
+. Clean and curate documents before ingestion (if possible)
+. Choose LLM deployment based on privacy needs
+. Incrementally enrich the graph as new data is added
+. Continuously evaluate output quality and relevance

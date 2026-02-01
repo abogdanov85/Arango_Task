@@ -1,0 +1,8 @@
+:triton-inference-server: https://docs.arango.ai/ai-suite/reference/triton-inference-server[Triton Inference Server]
+:mlflow: https://docs.arango.ai/ai-suite/reference/mlflow[MLflow]
+:retriever-service: https://docs.arango.ai/ai-suite/reference/retriever[Retriever Service]
+:importer-service: https://docs.arango.ai/ai-suite/reference/importer[Importer Service]
+:general-graphs: https://docs.arango.ai/arangodb/3.12/graphs/general-graphs[General Graphs]
+:smart-graphs: https://docs.arango.ai/arangodb/3.12/graphs/smartgraphs[SmartGraphs]
+:enterprise-graphs: https://docs.arango.ai/arangodb/3.12/graphs/enterprisegraphs[EnterpriseGraphs]
+:satellite-graphs: https://docs.arango.ai/arangodb/3.12/graphs/satellitegraphs[SatelliteGraphs]

@@ -1,0 +1,54 @@
+= Graph Type Decision Guide
+:pdf-page-layout: landscape
+
+// Dictionary for internal use inside tech writer team
+// with pages and links to them and other predefined entities
+include::dictionary.adoc[]
+
+This decision guide helps you choose between the different *named graph types* in ArangoDB based on your scale, performance, and complexity requirements.
+
+== Overview of Graph Types
+
+* {general-graphs} -- basic graph structure, easy to set up
+* {smart-graphs} -- optimized for high performance and large clusters
+* {enterprise-graphs} -- enterprise-level graph with automated sharding
+* {satellite-graphs} -- fully replicated graph for maximum locality
+
+<<<
+
+== Decision Guide
+
+[cols="2,3,3,4"]
+|===
+| Graph Type | When to Use | Best For | Trade-offs
+
+| *General Graphs*
+| Use when you need a simple graph with no special sharding or performance concerns.
+| ✓ Small datasets
+| *Pros*: Easiest to set up, no special config.
+
+*Cons*: Random data distribution can hurt query performance at scale.
+
+| *SmartGraphs*
+| Use when your graph is large or highly interconnected and you have an attribute that groups nodes naturally.
+| ✓ Large datasets +
+✓ Cluster deployments
+| *Pros*: Value-based sharding improves data locality and reduces network hops for traversals.
+
+*Cons*: Requires a `smartGraphAttribute` -- not ideal if no clustering property exists.
+
+| *EnterpriseGraphs*
+| Use when you need enterprise-grade scalability without manually choosing a sharding attribute.
+| ✓ Large cluster workloads
+| *Pros*: Randomized sharding that co-locates adjacent edges and nodes, reducing network hops without a `smartGraphAttribute`.
+
+*Cons*: Slightly more complex setup than SmartGraphs; still not replicated like SatelliteGraphs.
+
+| *SatelliteGraphs*
+| Use when your graph can fit on each server and you need maximum local performance for traversals.
+| ✓ Large and read-heavy workloads
+| *Pros*: Full replication to all DB-Servers eliminates network hops for traversals.
+
+*Cons*: The graph data must fit on each node, therefore it will typically be a small to medium sized graph. Writes are slower due to replication.
+|===
+

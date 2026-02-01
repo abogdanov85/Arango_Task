@@ -1,0 +1,75 @@
+= "Create Project" Endpoint Review
+:author: Alexey Bogdanov
+
+== What’s Missing
+
+=== {counter:sec-1}. Missing Response Schema
+
+The documentation does not include the full success response body schema — for example, what fields are returned when a project is successfully created (e.g., project metadata, IDs, timestamps).
+
+Developers may need to know the exact response structure for API integration, error handling, etc.
+
+A full response JSON example can be added after the `Create Project` request example.
+
+
+=== {counter:sec-1}. Missing Error Cases
+
+The current description doesn’t list potential errors or status codes.
+
+It will help developers build robust error handling, especially for automated tools and SDKs.
+
+It can be added at the end of the section.
+
+=== {counter:sec-1}. Missing details about `project_type`
+
+It stays unclear how a user should choose a value for `project_type` parameter.
+
+
+== Issues in Existing Content
+
+=== Unclear Authentication Context
+
+The current documentation shows a curl with Authorization: `Bearer <your-bearer-token>` but doesn’t explain how to obtain the token.
+
+<<<
+
+== Improvement Suggestions
+
+=== {counter:sec-3}. Add a Table for Properties Descriptions
+
+A table may look like this:
+
+[cols="2,1,3,3"]
+|===
+|*Property* |*Required* |*Description* | *Naming*
+
+|`project_name`
+|Yes
+|Unique identifier for your project.
+|1-63 characters (letters, numbers, _, -).
+
+|`project_type`
+|Yes
+|Type of project. <and how to choose it>
+|e.g., "graphrag"
+
+|`project_db_name`
+|Yes
+|The ArangoDB database name where the project will be created.
+|
+
+|`project_description`
+|No
+|A description of your project.
+|
+|===
+
+=== {counter:sec-3}. Add a “Best Practices” or “Tips” Section
+
+This section may include:
+
+* Recommended naming conventions
+* How to choose `project_type` values
+* Some real examples
+
+This would make the API easier to adopt and integrate.
