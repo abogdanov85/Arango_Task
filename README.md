@@ -49,5 +49,5 @@ asciidoctor-pdf -a allow-uri-read -r asciidoctor-diagram task<N>.adoc
 Prerequisites:
 
 - Install [Asciidoctor](https://docs.asciidoctor.org/asciidoctor/latest/install/)
-- Install [Asciidoctor PDF](https://docs.asciidoctor.org/asciidoctor/latest/install/)
+- Install [Asciidoctor PDF](https://docs.asciidoctor.org/pdf-converter/latest/install/)
 - Install [Asciidoctor Diagram](https://docs.asciidoctor.org/diagram-extension/latest/installation/)
