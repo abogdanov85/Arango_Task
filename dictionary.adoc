@@ -1,3 +1,4 @@
+// Dictionary for internal use inside tech writer team
 :triton-inference-server: https://docs.arango.ai/ai-suite/reference/triton-inference-server[Triton Inference Server]
 :mlflow: https://docs.arango.ai/ai-suite/reference/mlflow[MLflow]
 :retriever-service: https://docs.arango.ai/ai-suite/reference/retriever[Retriever Service]
