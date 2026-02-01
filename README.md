@@ -5,6 +5,8 @@ The source files for three tasks are [Asciidoc](https://asciidoc.org/) documents
 - [`task2.adoc`](task2.adoc)
 - [`task3.adoc`](task3.adoc)
 
+Previewing `.adoc` files on GitHub does not work properly, as they do not support `include` statements, diagrams and some other Asciidoc objects.
+
 The result files (built from these sources) are both in `.html` and `.pdf`.
 
 ## Results in `.html`
